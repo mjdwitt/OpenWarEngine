@@ -21,26 +21,51 @@ module Hardware
 
 import Data.Map as M
 
-import Territories as T
+--import Territories as T
 import UnitTypes as U
 
+-- | Game state information is tracked as a list of the players'
+-- states and the state of the board.
 data Game = Game [Player] Board
 
+-- | A player's state consists of immutable nation and mutable income,
+-- balance, and purchased-yet-unplaced units.
 data Player = Player
             { nation        :: Nation
             , playerIncome  :: Int
             , playerBalance :: Int
             , unitsToPlace  :: Units
-            }
+            } deriving(Show)
 
+-- | Updates a player's income. The input income is expected to be
+-- positive, as all valid incomes are.
 newPlayerIncome :: Player -> Int -> Player
 newPlayerIncome (Player n _ b u) newIncome = Player n newIncome b u
 
+-- | Updates a player's balance. Balance's also must be positive.
 newPlayerBalance :: Player -> Int -> Player
 newPlayerBalance (Player n i _ u) newBal = Player n i newBal u
 
+-- | Updates a player's purchased units and subtracts the cost from
+-- their blance. The total cost of the purchased units is expected
+-- to be less than the player's balance.
 buyUnits :: Player -> Units -> Player
-buyUnits (Player n i b _) newUnits = Player n i b newUnits
+buyUnits (Player n i b _) newUnits = Player n i b' newUnits
+  where b' = b - totalUnitsCost newUnits
+        totalUnitsCost :: Units -> Int
+        totalUnitsCost units =
+          (U.cost U.infantry * infantry units) +
+          (U.cost U.artillery * artillery units) +
+          (U.cost U.armor * armors units) +
+          (U.cost U.antiair * antiair units) +
+          (U.cost U.factory * factories units) +
+          (U.cost U.fighter * fighters units) +
+          (U.cost U.bomber * bombers units) +
+          (U.cost U.battleship * battleships units) +
+          (U.cost U.destroyer * destroyers units) +
+          (U.cost U.carrier * carriers units) +
+          (U.cost U.transport * transports units) +
+          (U.cost U.submarine * submarines units)
 
 data Nation = Russia
             | Germany
@@ -69,6 +94,7 @@ data Units = Units
            , fighters    :: Int
            , bombers     :: Int
            , battleships :: Int
+           , destroyers  :: Int
            , carriers    :: Int
            , transports  :: Int
            , submarines  :: Int

@@ -34,6 +34,7 @@ factory    = UnitType 15 0 0 0 True
 fighter    = UnitType 12 4 3 4 False
 bomber     = UnitType 15 6 5 1 False
 battleship = UnitType 24 2 4 4 False
+destroyer  = UnitType 12 2 3 3 False
 carrier    = UnitType 18 2 1 3 False
 transport  = UnitType  8 2 0 1 False
 submarine  = UnitType  8 2 2 2 False
