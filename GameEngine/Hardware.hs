@@ -7,7 +7,7 @@ module Hardware
   , ally
   , axis
   , Units(..)
-  , Board(..)
+  , Board
   , Zone
   , zoneName
   , zoneValue
@@ -19,8 +19,10 @@ module Hardware
   , newZoneUnits
   ) where
 
-import UnitTypes as UT
 import Data.Map as M
+
+import Territories as T
+import UnitTypes as U
 
 data Game = Game [Player] Board
 
@@ -72,7 +74,7 @@ data Units = Units
            , submarines  :: Int
            } deriving(Show)
 
-data Board = Board (Map String Zone)
+type Board = Map String Zone
 
 data Zone = Zone
           { zoneName  :: String
