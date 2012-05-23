@@ -28,7 +28,7 @@ import UnitTypes as U
 -- states and the state of the board.
 data Game = Game [Player] Board
 
--- | A player's state consists of immutable nation and mutable income,
+-- | Player state consists of immutable nation and mutable income,
 -- balance, and purchased-yet-unplaced units.
 data Player = Player
             { nation        :: Nation
@@ -37,16 +37,16 @@ data Player = Player
             , unitsToPlace  :: Units
             } deriving(Show)
 
--- | Updates a player's income. The input income is expected to be
+-- | Updates player income. The input income is expected to be
 -- positive, as all valid incomes are.
 newPlayerIncome :: Player -> Int -> Player
 newPlayerIncome (Player n _ b u) newIncome = Player n newIncome b u
 
--- | Updates a player's balance. Balance's also must be positive.
+-- | Updates player balance. Balance's also must be positive.
 newPlayerBalance :: Player -> Int -> Player
 newPlayerBalance (Player n i _ u) newBal = Player n i newBal u
 
--- | Updates a player's purchased units and subtracts the cost from
+-- | Updates player purchased units and subtracts the cost from
 -- their blance. The total cost of the purchased units is expected
 -- to be less than the player's balance.
 buyUnits :: Player -> Units -> Player
@@ -74,6 +74,7 @@ data Nation = Russia
             | America
             deriving(Eq, Show, Read)
 
+-- | 'ally' and 'axis' test if a nation is on the respective team.
 ally :: Nation -> Bool
 ally Russia  = True
 ally Britain = True
@@ -85,6 +86,7 @@ axis Germany = True
 axis Japan   = True
 axis _       = False
 
+-- | A record counting the number of each type of unit.
 data Units = Units
            { infantry    :: Int
            , artillery   :: Int
