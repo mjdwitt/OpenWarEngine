@@ -48,7 +48,8 @@ newPlayerBalance (Player n i _ u) newBal = Player n i newBal u
 
 -- | Updates player purchased units and subtracts the cost from
 -- their blance. The total cost of the purchased units is expected
--- to be less than the player's balance.
+-- to be less than the player's balance. This implies that the
+-- client should check to make sure that it can afford the purchase.
 buyUnits :: Player -> Units -> Player
 buyUnits (Player n i b _) newUnits = Player n i b' newUnits
   where b' = b - totalUnitsCost newUnits
