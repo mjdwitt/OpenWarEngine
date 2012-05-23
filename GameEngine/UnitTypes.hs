@@ -12,7 +12,10 @@ module UnitTypes
   , armor
   , antiair
   , factory
+  , fighter
+  , bomber
   , battleship
+  , destroyer
   , carrier
   , transport
   , submarine
