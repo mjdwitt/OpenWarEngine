@@ -54,10 +54,10 @@ buyUnits (Player n i b _) newUnits = Player n i b' newUnits
   where b' = b - totalUnitsCost newUnits
         totalUnitsCost :: Units -> Int
         totalUnitsCost units =
-          (U.cost U.infantry * infantry units) +
-          (U.cost U.artillery * artillery units) +
+          (U.cost U.infantry * infantries units) +
+          (U.cost U.artillery * artilleries units) +
           (U.cost U.armor * armors units) +
-          (U.cost U.antiair * antiair units) +
+          (U.cost U.antiair * antiairs units) +
           (U.cost U.factory * factories units) +
           (U.cost U.fighter * fighters units) +
           (U.cost U.bomber * bombers units) +
@@ -88,10 +88,10 @@ axis _       = False
 
 -- | A record counting the number of each type of unit.
 data Units = Units
-           { infantry    :: Int
-           , artillery   :: Int
+           { infantries  :: Int
+           , artilleries :: Int
            , armors      :: Int
-           , antiair     :: Int
+           , antiairs    :: Int
            , factories   :: Int
            , fighters    :: Int
            , bombers     :: Int
