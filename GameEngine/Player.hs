@@ -4,6 +4,7 @@
 module Player where
 
 import Units
+import Board
 
 -- | Player state consists of immutable nation and mutable income,
 -- balance, and purchased-yet-unplaced units.
