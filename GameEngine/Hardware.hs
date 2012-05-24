@@ -20,9 +20,9 @@ module Hardware
   ) where
 
 import Data.Map as M
+import Data.Maybe
 
---import Territories as T
-import UnitTypes as U
+import Units
 
 -- | Game state information is tracked as a list of the players'
 -- states and the state of the board.
@@ -55,18 +55,31 @@ buyUnits (Player n i b _) newUnits = Player n i b' newUnits
   where b' = b - totalUnitsCost newUnits
         totalUnitsCost :: Units -> Int
         totalUnitsCost units =
-          (U.cost U.infantry * infantries units) +
-          (U.cost U.artillery * artilleries units) +
-          (U.cost U.armor * armors units) +
-          (U.cost U.antiair * antiairs units) +
-          (U.cost U.factory * factories units) +
-          (U.cost U.fighter * fighters units) +
-          (U.cost U.bomber * bombers units) +
-          (U.cost U.battleship * battleships units) +
-          (U.cost U.destroyer * destroyers units) +
-          (U.cost U.carrier * carriers units) +
-          (U.cost U.transport * transports units) +
-          (U.cost U.submarine * submarines units)
+          (unitCost infantryStats * infantry units) +
+          (unitCost artilleryStats * artillery units) +
+          (unitCost armorStats * armors units) +
+          (unitCost antiairStats * antiairs units) +
+          (unitCost factoryStats * factories units) +
+          (unitCost fighterStats * fighters units) +
+          (unitCost bomberStats * bombers units) +
+          (unitCost battleshipStats * battleships units) +
+          (unitCost destroyerStats * destroyers units) +
+          (unitCost carrierStats * carriers units) +
+          (unitCost transportStats * transports units) +
+          (unitCost submarineStats * submarines units)
+
+-- | Places some or all of the purchased units on the board.
+placeUnits :: Player -> Units -> Zone -> (Player, Zone)
+placeUnits player units zone =
+  let pu = unitsToPlace player
+      pn = playerNation player
+      mzu = M.lookup pn (zoneUnits zone)
+      zu = fromMaybe noUnits mzu
+      pu' = pu .-. units
+      zu' = zu .+. units
+  in ( newPlayerUnits player pu'
+     , newZoneUnits zone $ insert pn zu' $ zoneUnits zone
+     )
 
 data Nation = Russia
             | Germany
