@@ -3,6 +3,8 @@
 
 module Units where
 
+
+
 -- | A record counting the number of each type of unit.
 data Units = Units
            { infantry    :: Int
