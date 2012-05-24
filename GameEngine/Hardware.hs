@@ -20,3 +20,10 @@ data Game = Game
           , us :: Player
           , board :: Board
           }
+
+newRu ru' (Game _ de uk jp us board)    = Game ru' de uk jp us board
+newDe de' (Game ru _ uk jp us board)    = Game ru de' uk jp us board
+newUk uk' (Game ru de _ jp us board)    = Game ru de uk' jp us board
+newJp jp' (Game ru de uk _ us board)    = Game ru de uk jp' us board
+newUs us' (Game ru de uk jp _ board)    = Game ru de uk jp us' board
+newBoard board' (Game ru de uk jp us _) = Game ru de uk jp us board'
