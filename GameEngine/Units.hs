@@ -22,7 +22,7 @@ data Units = Units
            } deriving(Eq,Show,Read)
 
 -- | The empty record of units.
-noUnits = Units 0 0 0 0 0 0 0 0 0 0 0 0
+noUnits          = Units 0 0 0 0 0 0 0 0 0 0 0 0
 
 -- Some homogenous constructors.
 allInfantry n    = Units n 0 0 0 0 0 0 0 0 0 0 0
