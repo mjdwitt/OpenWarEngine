@@ -3,14 +3,21 @@
 
 module Hardware.Player 
   ( Player(..)
+  , playerIsNation
   , newPlayerIncome
   , newPlayerBalance
   , newPlayerUnits
   , collectIncome
   , buyUnits
   , placeUnits
+  , Research(..)
+  , attemptResearch
+  , isKnownBy
   ) where
 
+import System.IO.Unsafe
+
+import Hardware.Dice
 import Hardware.Units
 import Hardware.Zone
 
@@ -28,6 +35,10 @@ data Player = Player
 
 instance Eq Player where
   a == b = playerNation a == playerNation b
+
+-- | Tests if a given player is a given nation.
+playerIsNation :: Player -> Nation -> Bool
+playerIsNation p n = playerNation p == n
 
 -- | Updates player income. The input income is expected to be
 -- positive, as all valid incomes are.
@@ -93,6 +104,7 @@ placeUnits player units zone =
 
 
 
+-- | Data types for each of the researchable techs.
 data Research = JetPower
               | Rockets
               | SuperSubs
@@ -100,3 +112,26 @@ data Research = JetPower
               | IndustrialTech
               | HeavyBombers
                 deriving(Show,Read,Eq,Ord)
+
+-- | Spends money on dice and attempts research with those dice.
+attemptResearch :: Int -> Research -> Player -> Player
+attemptResearch dice tech (Player n i b u r) =
+  Player n i (b - 5*dice) u $ r ++ result
+    where result = take 1 $ filter (== tech) rolls
+          rolls = map intToTech
+                . unsafePerformIO -- Okay, so it's not so functional.
+                $ rollN dice
+
+-- | Translates a number in [1..6] to a Research value.
+intToTech :: Int -> Research
+intToTech n | n == 1    = JetPower
+            | n == 2    = Rockets
+            | n == 3    = SuperSubs
+            | n == 4    = LongRangeAircraft
+            | n == 5    = IndustrialTech
+            | n == 6    = HeavyBombers
+            | otherwise = error "intToTech: int not in range"
+
+-- | Test if a player has the given research completed.
+isKnownBy :: Research -> Player -> Bool
+tech `isKnownBy` player = tech `elem` researchedTech player
