@@ -1,6 +1,6 @@
 -- Hardware type definitions and logic
 
-module Hardware where
+module Game where
 
 import Data.Map as M
 import Data.Maybe
@@ -21,6 +21,7 @@ data Game = Game
           , board :: Board
           }
 
+-- Some modifiers for Game objects
 newRu ru' (Game _ de uk jp us board)    = Game ru' de uk jp us board
 newDe de' (Game ru _ uk jp us board)    = Game ru de' uk jp us board
 newUk uk' (Game ru de _ jp us board)    = Game ru de uk' jp us board
