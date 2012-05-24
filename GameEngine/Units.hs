@@ -1,7 +1,42 @@
 -- Units.hs
 -- Logic for Units data types
 
-module Units where
+module Units
+  ( Units(..)
+  , noUnits
+  , allInfantry
+  , allArtillery
+  , allArmors
+  , allAntiairs
+  , allFactories
+  , allFighters
+  , allBombers
+  , allBattleships
+  , allDestroyers
+  , allCarriers
+  , allTransports
+  , allSubmarines
+  , (.+.)
+  , (.-.)
+  , UnitType
+  , unitCost
+  , movement
+  , attack
+  , defense
+  , capturable
+  , infantryStats
+  , artilleryStats
+  , armorStats
+  , antiairStats
+  , factoryStats
+  , fighterStats
+  , bomberStats
+  , battleshipStats
+  , destroyerStats
+  , carrierStats
+  , transportStats
+  , submarineStats
+  ) where
 
 
 
