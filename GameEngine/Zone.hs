@@ -34,6 +34,15 @@ newZoneUnits newUnits (Zone n v o c _ az) =
 data AllUnits = AllUnits (Map Nation Units)
                 deriving(Show,Read)
 
+allEmptyUnits :: AllUnits
+allEmptyUnits = AllUnits $
+  M.fromList [ (Russia, noUnits)
+             , (Germany, noUnits)
+             , (Britain, noUnits)
+             , (Japan, noUnits)
+             , (America, noUnits)
+             ]
+
 getNationsUnits :: Nation -> AllUnits -> Units
 getNationsUnits nation (AllUnits map) =
   fromMaybe noUnits $ M.lookup nation map
