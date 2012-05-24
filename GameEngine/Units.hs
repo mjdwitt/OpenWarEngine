@@ -49,6 +49,8 @@ allSubmarines n  = Units 0 0 0 0 0 0 0 0 0 0 0 n
 (Units uinf uart uarm uant ufac ufig ubom ubat udes ucar utra usub) .-. (Units vinf vart varm vant vfac vfig vbom vbat vdes vcar vtra vsub) =
   Units (uinf - vinf) (uart - vart) (uarm - varm) (uant - vant) (ufac - vfac) (ufig - vfig) (ubom - vbom) (ubat - vbat) (udes - vdes) (ucar - vcar) (utra - vtra) (usub - vsub)
 
+
+
 -- | A record of statistics for a particular unit type.
 data UnitType = UnitType
               { unitCost   :: Int
