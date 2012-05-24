@@ -1,7 +1,11 @@
 -- Board.hs
 -- Board logic
 
-module Board where
+module Board 
+  ( Board
+  , lookupZone
+  , insertZone
+  ) where
 
 import Data.Map as M
 import Data.Maybe

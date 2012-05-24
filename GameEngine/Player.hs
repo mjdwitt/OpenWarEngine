@@ -1,7 +1,15 @@
 -- Player.hs
 -- Player and Nation data types and logic
 
-module Player where
+module Player 
+  ( Player(..)
+  , newPlayerIncome
+  , newPlayerBalance
+  , newPlayerUnits
+  , collectIncome
+  , buyUnits
+  , placeUnits
+  ) where
 
 import Units
 import Zone

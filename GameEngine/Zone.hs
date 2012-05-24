@@ -1,7 +1,18 @@
 -- Zone.hs
 -- Zone, AllUnits, and Nation data types
 
-module Zone where
+module Zone 
+  ( Zone(..)
+  , newZoneOwner
+  , newZoneUnits
+  , AllUnits
+  , allEmptyUnits
+  , getNationsUnits
+  , insertNationsUnits
+  , Nation(..)
+  , ally
+  , axis
+  ) where
 
 import Data.Map as M
 import Data.Maybe
