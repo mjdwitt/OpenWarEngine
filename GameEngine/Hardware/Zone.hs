@@ -1,7 +1,7 @@
 -- Zone.hs
 -- Zone, AllUnits, and Nation data types
 
-module Zone 
+module Hardware.Zone 
   ( Zone(..)
   , newZoneOwner
   , newZoneUnits
@@ -17,7 +17,7 @@ module Zone
 import Data.Map as M
 import Data.Maybe
 
-import Units
+import Hardware.Units
 
 
 

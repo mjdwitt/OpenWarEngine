@@ -1,7 +1,7 @@
 -- Player.hs
 -- Player and Nation data types and logic
 
-module Player 
+module Hardware.Player 
   ( Player(..)
   , newPlayerIncome
   , newPlayerBalance
@@ -11,8 +11,8 @@ module Player
   , placeUnits
   ) where
 
-import Units
-import Zone
+import Hardware.Units
+import Hardware.Zone
 
 
 

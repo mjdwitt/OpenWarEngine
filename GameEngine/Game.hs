@@ -5,10 +5,7 @@ module Game where
 import Data.Map as M
 import Data.Maybe
 
-import Board
-import Player
-import Units
-import Zone
+import Hardware
 
 -- | Game state information is tracked as a list of the players'
 -- states and the state of the board.

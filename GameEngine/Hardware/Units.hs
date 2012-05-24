@@ -1,7 +1,7 @@
 -- Units.hs
 -- Logic for Units data types
 
-module Units
+module Hardware.Units
   ( Units(..)
   , noUnits
   , allInfantry

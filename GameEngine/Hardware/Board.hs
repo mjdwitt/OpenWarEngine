@@ -1,7 +1,7 @@
 -- Board.hs
 -- Board logic
 
-module Board 
+module Hardware.Board 
   ( Board
   , lookupZone
   , insertZone
@@ -10,8 +10,8 @@ module Board
 import Data.Map as M
 import Data.Maybe
 
-import Units
-import Zone
+import Hardware.Units
+import Hardware.Zone
 
 
 
