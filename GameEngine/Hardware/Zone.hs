@@ -3,6 +3,7 @@
 
 module Hardware.Zone 
   ( Zone(..)
+  , zoneIsNamed
   , newZoneOwner
   , newZoneUnits
   , AllUnits
@@ -25,19 +26,24 @@ import Hardware.Units
 data Zone = Zone
           { name  :: String
           , value :: Int
+          , water :: Bool
           , owner :: Nation
           , color :: Nation -- original owner
           , zoneUnits :: AllUnits
           , adjacentZones :: [Zone]
           } deriving(Show,Read)
 
+-- | Tests if a given zone has the given name.
+zoneIsNamed :: Zone -> String -> Bool
+zoneIsNamed z n = name z == n
+
 newZoneOwner :: Nation -> Zone -> Zone
-newZoneOwner newOwner (Zone n v _ c zu az) =
-  Zone n v newOwner c zu az
+newZoneOwner newOwner (Zone n v w _ c zu az) =
+  Zone n v w newOwner c zu az
 
 newZoneUnits :: AllUnits -> Zone -> Zone
-newZoneUnits newUnits (Zone n v o c _ az) =
-  Zone n v o c newUnits az
+newZoneUnits newUnits (Zone n v w o c _ az) =
+  Zone n v w o c newUnits az
 
 
 
