@@ -166,7 +166,7 @@ also objects and the board's value is an array.
   `"Germany"`, `"Britain"`, `"Japan"`, or `"America"`.
 + `"income"` and `"balance"` are both positive integers.
 + `"purchasedUnits"` is an array of unit counts.
-+ `"researchedTech" is an array of strings describing the tech
++ `"researchedTech"` is an array of strings describing the tech
   that the player may have researched. Any strings must be one of
   `"JetPower"`, `"Rockets"`, `"SuperSubs"`, `"LongRangeAircraft"`,
   `"IndustrialTech"`, or `"HeavyBombers"`.
