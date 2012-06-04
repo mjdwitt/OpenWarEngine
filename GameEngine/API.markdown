@@ -9,7 +9,7 @@ formats all of its replys in JSON as well. In order to send the
 engine any data, one always includes three different pieces of data:
 the current game state, the modification request object, and the
 nation making the request. (This document assumes a foreknowledge of
-JSON. See the official [JSON website](www.json.org) for more
+JSON. See the official [JSON website](http://www.json.org) for more
 information.)
 
 All replies are returned as an object of two string-value pairs: a
