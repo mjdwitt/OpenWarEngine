@@ -1,7 +1,5 @@
 -- Server.hs
 
-module Server
-  ( module JSON
-  ) where
+module Server where
 
 import Server.JSON
