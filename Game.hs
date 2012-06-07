@@ -17,7 +17,6 @@ data Game = Game
           , jp :: Player
           , us :: Player
           , board :: Board
-          , turn :: Turn
           } deriving(Show,Read)
 
 -- Some modifiers for Game objects
