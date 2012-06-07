@@ -2,52 +2,65 @@
 
 This document details the API for making requests of the game engine
 and the JSON formatting used to communicate data to and from the
-engine. 
+engine.
 
-The game engine expects all data it receives to be in JSON and
-formats all of its replys in JSON as well. In order to send the
-engine any data, one always includes three different pieces of data:
-the current game state, the modification request object, and the
-nation making the request. (This document assumes a foreknowledge of
-JSON. See the official [JSON website](http://www.json.org) for more
-information.)
+The game engine API is made available to clients local to its
+machine, namely the game client which interacts with the players'
+clients and the database. Calls are made by sending HTTP requests
+to the API server at `http://localhost:1942`. 
 
-All replies are returned as an object of two string-value pairs: a
-summary of the action taken and the (possibly) modified game state.
+All message bodies in requests and responses are of content-type
+`application/json`. This document assumes a foreknowledge of JSON.
+See the official [JSON website](http://www.json.org) for more
+information. All of the following definitions are case *sensitive*.
 
-	{ "summary" : string
-	, "newGameState" : gameState
+## Responses
+
+	HTTP/1.1 200 OK
+	Content-Type: application/json
+	
+	{ "summary"   : string
+	, "gameState" : gameState
 	}
+
+Most replies are returned as an object of two string-value pairs: a
+summary of the action taken and the (possibly) modified game state.
+When the requesting player receives this reply object, it is
+simultaneously made available to the other players' clients (via
+Android push notifications, if possible.)
 
 If a request was denied, the summary will begin with the string
 "Denied."
 
-All definitions are case *sensitive*.
+Some combat-related interactions will reply with something other
+than this uniform reply object. See below for details.
 
-## Request objects
+## Requests
 
-	{ "gameState" : gameState
+	POST /<requestResource> HTTP/1.1
+	Host: localhost:1942
+	Content-Type: application/json
+	
+	{ "game"   : gameState
 	, "nation" : strNation
-	, "request" :
-		{ "name" : reqName
-		, "params" :
-			{ param1 : val1
-			, ...
-			}
+	, "params" :
+		{ param1 : val1
+		, ...
 		}
 	}
 
-As stated above, requests are formed of three objects, the game
-state, the requesting player's nation, and the modification request.
+In order to send the engine requests, one always includes three
+different pieces of data: the current game state, the modification
+request parameters, and the nation making the request.
 
-### API requests
+### Simple API requests
 
-Possible `reqName`s are listed below in bold with documentation of
+Possible `<requestResources>`s are listed below in bold with documentation of
 their corresponding purpose and parameter object.
 
-**research**
+**`/research`**
 
-	{ "name"   : "research"
+	{ ...
 	, "params" : { "dice" : positiveInteger }
 	}
 
@@ -55,18 +68,18 @@ Requests to purchase and roll a number of research dies. Alters the
 player's balance and updates their known tech if the research is
 successful.
 
-**purchaseUnits**
+**`/purchaseUnits`**
 
-	{ "name"   : "purchaseUnits"
+	{ ...
 	, "params" : { "unitCounts" : arrUnits }
 	}
 
 Requests to purchase a number of units to be placed later. Alters the
 player's balance and places purchased units in the player's state.
 
-**combatMoves**
+**`/combatMoves`**
 
-	{ "name"   : "combatMoves"
+	{ ...
 	, "params" :
 		{ "movements" :
 			[ { "route" : arrStrZone
@@ -80,19 +93,51 @@ player's balance and places purchased units in the player's state.
 Perform a collection of moves which initiate combat and/or armor
 blitzes. `"route"` is an array of zone names through which the
 associated `"units"` will move. Movements will be performed in the
-order in which they appear in the movements array. The final zone
-in any route must be a hostile zone, unless a blitz was performed
-by an army of tanks. If the units detailed in the unit count array
+order in which they appear in the movements array. 
+
+For most units, the final zone in any route must be a hostile zone
+and all the other zones must be friendly. There are, however, many
+exceptions:
+
++ Tanks can *blitz* through unoccupied hostile zone and end in
+  either friendly or hostile zone. The player takes control of the
+  blitzed territory with no combat.
+  
++ Aircraft can fly over hostile zones as if they were friendly. No
+  combat occurs and the player does *not* take control of unoccupied
+  hostile zones along the route.
+  
+  Any zones containing hostile antiair, however, get to roll an
+  attack against each aircraft (hitting on a one or less.) If any
+  attacks are successful, the hit aircraft will simply not arrive
+  at its destination and be removed from the board.
+  
++ Aircraft which remain aboard carriers in this phase are unable
+  to participate in combat in the next phase. If their carrier
+  enters combat with them aboard and is sunk, they sink with
+  the carrier.
+
++ Submarines can move through hostile sea zones as if they were
+  friendly, unless those zones contain a destroyer. If a sub's
+  movement ends in a hostile sea zone, it will engage in combat
+  in the next phase.
+  
++ *Transport pickup needs to be clarified. I'll have to add some
+  special parameters or something in order describe this via the
+  API. Ditto for amphibious assaults, which must be declared in
+  this phase.*
+
+If the units detailed in the unit count array
 are not present in the first zone in the route, than the request as
 a whole will be denied and no modifications will be made.
 
-**combat**
+*Combat API calls are much more complex than all of the other
+phases' calls, requiring multiple players' real-time input and
+synchronization between clients. See the section below for details.*
 
-todo
+**`/noncombatMoves`**
 
-**noncombatMoves**
-
-	{ "name"   : "noncombatMoves"
+	{ ...
 	, "params" :
 		{ "movements" :
 			[ { "route" : arrStrZone
@@ -108,9 +153,9 @@ are of the same form as `combatMoves`. If any of the zones in the
 route are hostile, the entire request will be denied and no
 modifications will be made.
 
-**placeUnits**
+**`/placeUnits`**
 
-	{ "name"   : "placeUnits"
+	{ ...
 	, "params" :
 		{ "placements" :
 			[ { "zoneName" : strZoneName
@@ -128,15 +173,38 @@ which to place the `"units"` (which are represent by a unit count
 array of twelve non-negative integers.)
 
 
-**collectIncome**
+**`/collectIncome`**
 
-	{ "name"   : "collectIncome"
+	{ ...
 	, "params" : null
 	}
 
 Updates the player's income and adds the new income to the player's
 balance. Takes no parameters.
-	
+
+### Combat API calls and replies
+
+Many combat-related client-server interactions deviate from the
+simpler request-modification-receive-new-game-state loop of the
+above calls. As such, there are different combat request resources
+located under `/combat/` for different types of modification
+requests.
+
+Combat is initiated by the server after it performs the attacker's
+combat movements and finds that any destination or blitz zones
+contain hostile units. The server selects an embattled zone and
+intiates combat there. The battle is resolved through successive
+interactions between the attacker and defender and then the server
+selects the next embattled zone and initiates combat there. If there
+are no embattled zones remaining, the combat phase ends and the
+server notifies the attacker that it is now awaiting their
+noncombat movements.
+
+When combat starts, the server creates a *battleState* object which
+stores information about the battle. A battle sequence of actions
+follows the order described below:
+
+
 
 ### The gameState object
 
@@ -146,6 +214,7 @@ balance. Takes no parameters.
 	, "Japan"   : player
 	, "America" : player
 	, "board"   : board
+	, "turn"    : turn
 	}
 
 The game state is represented as an object of six string-value pairs,
@@ -232,3 +301,7 @@ however, have some more complex restrictions.
   catastrophic errors could occur. For instance, a zone named "Foo"
   might have an array of adjacent territories that looks like
   `["Bar", "Baz", "Quux"]`.
+
+#### The turn object
+
+Turn information must be supplied in the game state by
