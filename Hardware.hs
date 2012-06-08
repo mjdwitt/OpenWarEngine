@@ -1,5 +1,5 @@
 -- Hardware.hs
--- | Rexports all of the submodules.
+-- | Re-exports all of the submodules.
 
 module Hardware
   ( module Hardware.Board
