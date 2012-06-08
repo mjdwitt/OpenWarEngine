@@ -214,7 +214,6 @@ follows the order described below:
 	, "Japan"   : player
 	, "America" : player
 	, "board"   : board
-	, "turn"    : turn
 	}
 
 The game state is represented as an object of six string-value pairs,
