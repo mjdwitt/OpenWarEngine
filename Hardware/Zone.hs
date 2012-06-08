@@ -48,25 +48,35 @@ newZoneUnits newUnits (Zone n v w o c _ az) =
 
 
 -- | Data type used to store all the nations' units in a zone.
-data AllUnits = AllUnits (Map Nation Units)
-                deriving(Show,Read)
+data AllUnits = AllUnits
+  { rUnits :: Units
+  , gUnits :: Units
+  , bUnits :: Units
+  , jUnits :: Units
+  , aUnits :: Units
+  } deriving(Show)
 
 allEmptyUnits :: AllUnits
-allEmptyUnits = AllUnits $
-  M.fromList [ (Russia, noUnits)
-             , (Germany, noUnits)
-             , (Britain, noUnits)
-             , (Japan, noUnits)
-             , (America, noUnits)
-             ]
+allEmptyUnits = AllUnits noUnits noUnits noUnits noUnits noUnits
 
+-- | Returns the given nation's units from an AllUnits object.
 getNationsUnits :: Nation -> AllUnits -> Units
-getNationsUnits nation (AllUnits map) =
-  fromMaybe noUnits $ M.lookup nation map
+getNationsUnits Russia  = rUnits
+getNationsUnits Germany = gUnits
+getNationsUnits Britain = bUnits
+getNationsUnits Japan   = jUnits
+getNationsUnits America = aUnits
 
+-- | Overwrites the given nations units with the supplied units
+-- in the give AllUnits.
 insertNationsUnits :: Nation -> Units -> AllUnits -> AllUnits
-insertNationsUnits nation units (AllUnits map) =
-  AllUnits $ M.insert nation units map
+insertNationsUnits n u (AllUnits r g b j a) =
+  go n
+  where go Russia  = AllUnits u g b j a
+        go Germany = AllUnits r u b j a
+        go Britain = AllUnits r g u j a
+        go Japan   = AllUnits r g b u a
+        go America = AllUnits r g b j u
 
 
 
