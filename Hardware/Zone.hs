@@ -30,7 +30,7 @@ data Zone = Zone
           , owner :: Nation
           , color :: Nation -- original owner
           , zoneUnits :: AllUnits
-          , adjacentZones :: [Zone]
+          , adjacentZones :: [String]
           } deriving(Show,Read)
 
 -- | Tests if a given zone has the given name.
