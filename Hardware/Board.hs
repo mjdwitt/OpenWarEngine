@@ -31,3 +31,7 @@ unsafeLookupZone name board =
 -- | Insert a new zone into a board, replacing the old zone.
 insertZone :: String -> Zone -> Board -> Board
 insertZone name zone (Board map) = Board $ M.insert name zone map
+
+-- | Return all of the zones as in a list.
+listZones :: Board -> [Zone]
+listZones (Board map) = snd . unzip $ toList map
