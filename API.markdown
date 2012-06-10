@@ -204,7 +204,7 @@ When combat starts, the server creates a *battleState* object which
 stores information about the battle. A battle sequence of actions
 follows the order described below:
 
-
+*to be completed*
 
 ### The gameState object
 
