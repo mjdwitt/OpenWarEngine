@@ -208,6 +208,9 @@ follows the order described below:
 
 ### The gameState object
 
+This object accompanies all requests and replies.  It and its
+component objects are described below.
+
 	{ "Russia"  : player
 	, "Germany" : player
 	, "Britain" : player
