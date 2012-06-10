@@ -303,7 +303,3 @@ however, have some more complex restrictions.
   catastrophic errors could occur. For instance, a zone named "Foo"
   might have an array of adjacent territories that looks like
   `["Bar", "Baz", "Quux"]`.
-
-#### The turn object
-
-Turn information must be supplied in the game state by
